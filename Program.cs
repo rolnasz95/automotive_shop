@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Automotive_Shop
 {
@@ -15,6 +16,7 @@ namespace Automotive_Shop
 
             decimal tax = TaxCharges(oilLubeCost, flushCost);   // Calculate tax amount based on services provided only
 
+            PrintCharges(ref oilLubeCost, ref flushCost, ref miscCost, ref labor, ref tax);
             TotalCharges(ref oilLubeCost, ref flushCost, ref miscCost, ref labor, ref tax);     // Calculate and display total charges
 
         }
@@ -133,6 +135,36 @@ namespace Automotive_Shop
             Console.WriteLine("Labor costs: " + labor.ToString("C"));
             Console.WriteLine("Tax for services: " + tax.ToString("C"));
             Console.WriteLine("\nTotal amount: " + total.ToString("C"));
+        }
+
+        static void PrintCharges(ref decimal oilLube, ref decimal flush, ref decimal misc, ref decimal labor, ref decimal tax)
+        {
+            decimal total = oilLube + flush + misc + labor + tax;
+            string choice;
+
+            Console.Write("Do you want to create a .txt receipt for your invoice? (y/n): ");
+            choice = Console.ReadLine();
+
+            if (choice == "Y" || choice == "y")
+            {
+                StreamWriter receipt = new("C:\\Users\\Public\\Documents\\Receipt.txt");
+
+                receipt.WriteLine("INVOICE FOR SERVICE:");
+                receipt.WriteLine("OIL CHANGE: " + oilLube.ToString("C"));
+                receipt.WriteLine("RADIATOR FLUSH: " + flush.ToString("C"));
+                receipt.WriteLine("MISC. COST: " + misc.ToString("C"));
+                receipt.WriteLine("LABOR CHARGES: " + labor.ToString("C"));
+                receipt.WriteLine("TAX: " + tax.ToString("C"));
+                receipt.WriteLine("TOTAL COST: " + total.ToString("C"));
+
+                Console.WriteLine("Receipt successfully saved in C:\\Users\\Public\\Documents path.");
+
+                receipt.Close();
+            }
+            else
+            {
+                Console.WriteLine("Okay. Displaying final bill to console only.");
+            }
         }
     }
 }
